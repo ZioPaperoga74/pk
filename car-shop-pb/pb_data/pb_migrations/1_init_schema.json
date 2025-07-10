@@ -1,0 +1,129 @@
+{
+  "collections": [
+    {
+      "name": "cars",
+      "type": "base",
+      "schema": [
+        {
+          "name": "brand",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "model",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "year",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "price",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "mileage",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "fuel_type",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "transmission",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "color",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "images",
+          "type": "file",
+          "required": true,
+          "options": {
+            "maxSelect": 10,
+            "maxSize": 5242880,
+            "mimeTypes": ["image/jpeg", "image/png", "image/webp"]
+          }
+        },
+        {
+          "name": "features",
+          "type": "json",
+          "required": false
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_brand_model",
+          "columns": ["brand", "model"]
+        },
+        {
+          "name": "idx_price",
+          "columns": ["price"]
+        }
+      ]
+    },
+    {
+      "name": "users",
+      "type": "auth",
+      "schema": [
+        {
+          "name": "name",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "role",
+          "type": "text",
+          "required": true,
+          "options": {
+            "values": ["user", "admin"]
+          }
+        }
+      ]
+    },
+    {
+      "name": "favorites",
+      "type": "base",
+      "schema": [
+        {
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "options": {
+            "collectionId": "users",
+            "cascadeDelete": true
+          }
+        },
+        {
+          "name": "car",
+          "type": "relation",
+          "required": true,
+          "options": {
+            "collectionId": "cars",
+            "cascadeDelete": true
+          }
+        }
+      ],
+      "indexes": [
+        {
+          "name": "idx_user_car",
+          "columns": ["user", "car"]
+        }
+      ]
+    }
+  ]
+}
