@@ -62,6 +62,43 @@ func GetDefaultResetPasswordData(userName, resetURL string) EmailTemplateData {
 }
 
 
+func RenderVerifyEmail(data EmailTemplateData) (string, error) {
+	registry := template.NewRegistry()
+
+	html, err := registry.LoadFiles(
+		"views/base.html",
+		"views/verify_email.html",
+	).Render(map[string]any{
+		"title":            data.Title,
+		"header_title":     data.HeaderTitle,
+		"header_subtitle":  data.HeaderSubtitle,
+		"footer_text":      data.FooterText,
+		"footer_link":      data.FooterLink,
+		"footer_link_text": data.FooterLinkText,
+		"user_name":        data.UserName,
+		"verify_url":       data.ResetURL, // reuse ResetURL field for verify link
+	})
+
+	if err != nil {
+		return "", fmt.Errorf("failed to render verify email: %w", err)
+	}
+
+	return html, nil
+}
+
+func GetDefaultVerifyEmailData(userName, verifyURL string) EmailTemplateData {
+	return EmailTemplateData{
+		Title:          "Verify Your Email - Car Shop",
+		HeaderTitle:    "Email Verification",
+		HeaderSubtitle: "Activate your Car Shop account",
+		FooterText:     "This email was sent from Car Shop. If you have any questions, please contact our support team.",
+		FooterLink:     "https://your-car-shop-domain.com",
+		FooterLinkText: "Visit Car Shop",
+		UserName:       userName,
+		ResetURL:       verifyURL, // reuse ResetURL field for verify link
+	}
+}
+
 
 func ValidateTemplateFiles() error {
 	requiredFiles := []string{
